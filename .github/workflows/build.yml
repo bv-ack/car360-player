@@ -1,0 +1,40 @@
+name: Build and release APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q car360-player.zip -d src
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - run: gradle assembleDebug --no-daemon
+        working-directory: src/car360-player
+      - name: Read version and release notes
+        id: v
+        run: |
+          VERSION=$(grep -oP 'versionName = "\K[^"]+' src/car360-player/app/build.gradle.kts)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          awk -v h="## $VERSION" '$0==h{f=1;next} /^## /{f=0} f' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "Build $VERSION" > notes.md
+          cp src/car360-player/app/build/outputs/apk/debug/app-debug.apk "car360-player-v$VERSION.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: car360-player-apk
+          path: car360-player-v*.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.v.outputs.version }}
+          name: car360-player v${{ steps.v.outputs.version }}
+          body_path: notes.md
+          files: car360-player-v*.apk
