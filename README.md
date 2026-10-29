@@ -4,7 +4,7 @@ An Android app for head units that plays back raw 2x2 car 360 camera recordings 
 with a calendar, one timeline per day, zoom into a single camera, MP4 export and a tunable bird's-eye view.
 
 Built for a Nakamichi Android head unit with recordings on USB; it should work on other Android units too.
-Version 0.5 - see [CHANGELOG.md](CHANGELOG.md).
+Version 0.7.1 - see [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 - **Auto scan** of USB sticks and SD cards, or pick a folder by hand. The last scan is cached for a fast start.
@@ -15,11 +15,26 @@ Version 0.5 - see [CHANGELOG.md](CHANGELOG.md).
   a single zoomed camera is cropped and re-encoded, which takes longer. Keep the app open while it runs.
 - **Bird's-eye view** that stitches the four cameras onto the ground, with in-app tuning.
 
+## Keyboard (new in 0.7)
+The same app includes an on-screen keyboard that covers one half of the screen (left or right), so the other half stays visible and usable.
+- Open **Keyboard settings** on the calendar screen and follow steps 1-3 (turn on, switch to it, allow the microphone).
+- Big **Mic** button for voice typing: it types what you say, then presses Enter/Search/Send (can be turned off). Uses the unit's own speech recognition service; the voice language is set per layout.
+- **Flip** moves the panel to the other side (for left- or right-hand-drive cars).
+- **Over** mode leaves the app at full size under the panel; **Docked** mode behaves like a normal keyboard and shrinks the app.
+- **Adaptive letters** (off by default) slowly move your most-used letters toward the top-middle of the panel and the rarest toward the bottom corners, only after the keyboard has been hidden and shown again.
+  Only a count per letter is kept, on the device.
+- Add languages by dropping in a JSON layout file: see [LAYOUTS.md](LAYOUTS.md).
+- Not possible with a keyboard: shrinking another app sideways to fit beside it. The panel covers part of the app instead.
+
+## Roadmap
+- Voice assistant for English with macros (open apps, navigate, media, volume), configurable in a text file.
+- Optional device-wide assistant and a general side panel for shortcuts.
+
 ## Install
 1. Download `car360-player-*.apk` from the latest [Release](../../releases) (or from a build under the Actions tab).
 2. Copy it to the head unit (USB), open it with a file manager, and allow "unknown sources".
-3. Versions 0.5 and later share one signing key and install over each other. Moving from an older build needs one uninstall;
-   export your calibration first (Calib export).
+3. Versions 0.5 and later share one signing key and install over each other. Version 0.6 changed the package name, so it installs as a separate app from 0.5 and earlier: uninstall the old one after
+   exporting your calibration (Calib export).
 
 ## Using it
 - Start on the calendar. Press **Auto scan USB**, or **Choose folder manually**. Tap a highlighted day, then **Play this day**.
@@ -50,5 +65,5 @@ The project is a standard Gradle Android app (Kotlin, Media3, minSdk 21). GitHub
 Every push to `main` builds the APK and publishes it as a GitHub Release named after the version in `app/build.gradle.kts`, using the matching section of the changelog as release notes. A new version number makes a new release; the same number updates the existing one.
 
 ## Layout
-`app/src/main/java/com/bvack/car360/`: `MainActivity` (screens, playback, export), `ClipScanner` (finding clips),
-`TimelineView` (day timeline), `Birdseye` (settings, calibration import, GL renderer).
+`app/src/main/java/bvack/car360/`: `MainActivity` (screens, playback, export), `ClipScanner` (finding clips),
+`TimelineView` (day timeline), `Birdseye` (settings, calibration import, GL renderer), `KeyboardService`, `KbLayout` and `KeyboardSettingsActivity` (keyboard).

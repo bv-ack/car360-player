@@ -2,6 +2,20 @@
 
 All notable changes to this project are listed here. Versions follow `MAJOR.MINOR`.
 
+## 0.7.1
+- Adaptive letters now only move after the keyboard has been hidden and shown again, never while typing or switching fields.
+- The keyboard's mic button now types what you say and then presses Enter (Search/Send/Go) by itself. Can be turned off in Keyboard settings.
+
+## 0.7
+- Keyboard: half-screen panel on the left or right, big mic button for voice typing, flip side, Over and Docked modes.
+- Optional adaptive letter placement (most-used letters toward the top-middle).
+- User-expandable layouts from JSON files (see LAYOUTS.md); layout switching with the Lang key.
+- New "Keyboard settings" screen.
+
+## 0.6
+- Package renamed from `com.bvack.car360` to `bvack.car360`. Android treats this as a different app, so it installs
+  next to the old one instead of updating it: uninstall the old version (use Calib export first to keep your tuning).
+
 ## 0.5
 - Auto scan: finds recordings on USB sticks and SD cards without picking a folder.
 - Much faster scanning of a picked folder (one query per folder instead of one per file).
